@@ -12,14 +12,10 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        .library(
-            name: "Cursor",
-            targets: ["Cursor"]
-        ),
-        .library(
-            name: "Cursor Standard Library Integration",
-            targets: ["Cursor Standard Library Integration"]
-        ),
+        .library(name: "Cursor", targets: ["Cursor"]),
+        .library(name: "Cursor Standard Library Integration", targets: ["Cursor Standard Library Integration"]),
+        .library(name: "Cursor Foundation Library Integration", targets: ["Cursor Foundation Library Integration"]),
+        .library(name: "Cursor Test Support", targets: ["Cursor Test Support"]),
     ],
     dependencies: [
         .package(
@@ -36,40 +32,51 @@ let package = Package(
             name: "Cursor",
             dependencies: [
                 .product(name: "Iterator", package: "swift-iterator"),
-                .product(name: "Iterator Protocol", package: "swift-iterator"),
                 .product(name: "Checkpoint", package: "swift-checkpoint"),
-            ]
+            ],
+            path: "Sources/Cursor"
         ),
         .target(
             name: "Cursor Standard Library Integration",
             dependencies: [
-                "Cursor",
+                .target(name: "Cursor"),
                 .product(name: "Iterator", package: "swift-iterator"),
-                .product(name: "Iterator Protocol", package: "swift-iterator"),
                 .product(name: "Checkpoint", package: "swift-checkpoint"),
-            ]
+            ],
+            path: "Sources/Cursor Standard Library Integration"
         ),
-        .testTarget(
-            name: "Cursor Standard Library Integration Tests",
+        .target(
+            name: "Cursor Foundation Library Integration",
             dependencies: [
-                "Cursor",
-                "Cursor Standard Library Integration",
-                .product(name: "Checkpoint Test Support", package: "swift-checkpoint"),
-            ]
+                .target(name: "Cursor"),
+                .target(name: "Cursor Standard Library Integration"),
+            ],
+            path: "Sources/Cursor Foundation Library Integration"
+        ),
+        .target(
+            name: "Cursor Test Support",
+            dependencies: [
+                .target(name: "Cursor"),
+            ],
+            path: "Tests/Support"
         ),
         .testTarget(
             name: "Cursor Tests",
             dependencies: [
-                "Cursor",
+                .target(name: "Cursor"),
+                .target(name: "Cursor Standard Library Integration"),
                 .product(name: "Checkpoint Test Support", package: "swift-checkpoint"),
-            ]
+                .target(name: "Cursor Test Support"),
+                .target(name: "Cursor Foundation Library Integration"),
+            ],
+            path: "Tests/Cursor Tests"
         ),
     ],
     swiftLanguageModes: [.v6]
 )
 
-for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    let ecosystem: [SwiftSetting] = [
+for target in package.targets {
+    target.swiftSettings = [
         .strictMemorySafety(),
         .enableUpcomingFeature("ExistentialAny"),
         .enableUpcomingFeature("InternalImportsByDefault"),
@@ -78,5 +85,4 @@ for target in package.targets where ![.system, .binary, .plugin, .macro].contain
         .enableExperimentalFeature("Lifetimes"),
         .enableUpcomingFeature("InferIsolatedConformances"),
     ]
-    target.swiftSettings = (target.swiftSettings ?? []) + ecosystem
 }
