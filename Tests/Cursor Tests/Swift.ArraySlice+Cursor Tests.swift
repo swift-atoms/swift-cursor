@@ -1,6 +1,5 @@
 import Checkpoint_Test_Support
 import Cursor
-import Cursor_Standard_Library_Integration
 import Testing
 
 @Suite

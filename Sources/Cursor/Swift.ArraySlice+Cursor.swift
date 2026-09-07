@@ -1,5 +1,4 @@
 public import Checkpoint
-public import Cursor
 public import Iterator
 
 extension Swift.ArraySlice: @retroactive Iterator.`Protocol`, @retroactive Restorable, Cursor.`Protocol`

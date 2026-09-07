@@ -13,8 +13,8 @@ let package = Package(
     ],
     products: [
         .library(name: "Cursor", targets: ["Cursor"]),
-        .library(name: "Cursor Standard Library Integration", targets: ["Cursor Standard Library Integration"]),
-        .library(name: "Cursor Foundation Library Integration", targets: ["Cursor Foundation Library Integration"]),
+
+        .library(name: "Cursor Foundation Integration", targets: ["Cursor Foundation Integration"]),
         .library(name: "Cursor Test Support", targets: ["Cursor Test Support"]),
     ],
     dependencies: [
@@ -36,22 +36,13 @@ let package = Package(
             ],
             path: "Sources/Cursor"
         ),
+        
         .target(
-            name: "Cursor Standard Library Integration",
+            name: "Cursor Foundation Integration",
             dependencies: [
                 .target(name: "Cursor"),
-                .product(name: "Iterator", package: "swift-iterator"),
-                .product(name: "Checkpoint", package: "swift-checkpoint"),
             ],
-            path: "Sources/Cursor Standard Library Integration"
-        ),
-        .target(
-            name: "Cursor Foundation Library Integration",
-            dependencies: [
-                .target(name: "Cursor"),
-                .target(name: "Cursor Standard Library Integration"),
-            ],
-            path: "Sources/Cursor Foundation Library Integration"
+            path: "Sources/Cursor Foundation Integration"
         ),
         .target(
             name: "Cursor Test Support",
@@ -64,10 +55,9 @@ let package = Package(
             name: "Cursor Tests",
             dependencies: [
                 .target(name: "Cursor"),
-                .target(name: "Cursor Standard Library Integration"),
                 .product(name: "Checkpoint Test Support", package: "swift-checkpoint"),
                 .target(name: "Cursor Test Support"),
-                .target(name: "Cursor Foundation Library Integration"),
+                .target(name: "Cursor Foundation Integration"),
             ],
             path: "Tests/Cursor Tests"
         ),

@@ -1,5 +1,4 @@
 public import Checkpoint
-public import Cursor
 public import Iterator
 
 extension Swift.Substring: @retroactive Iterator.`Protocol`, @retroactive Restorable, Cursor.`Protocol` {
