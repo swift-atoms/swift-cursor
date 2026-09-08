@@ -59,7 +59,8 @@ let package = Package(
                 .target(name: "Cursor Test Support"),
                 .target(name: "Cursor Foundation Integration"),
             ],
-            path: "Tests/Cursor Tests"
+            path: "Tests/Cursor Tests",
+            resources: [.copy("Fixtures")]
         ),
     ],
     swiftLanguageModes: [.v6]

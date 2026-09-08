@@ -2,12 +2,16 @@ import Checkpoint_Test_Support
 import Cursor
 import Testing
 
-@Suite
-struct `Cursor Tests` {
+extension Cursor {
+    @Suite
+    struct `Cursors restore iteration state` {}
+}
+
+extension Cursor.`Cursors restore iteration state` {
 
     @Test
-    func `iterates its elements in order`() {
-        var cursor = ArrayCursor([1, 2, 3])
+    func `A cursor iterates its elements in order`() {
+        var cursor = Self.ArrayCursor([1, 2, 3])
 
         #expect(cursor.next() == 1)
         #expect(cursor.next() == 2)
@@ -16,8 +20,8 @@ struct `Cursor Tests` {
     }
 
     @Test
-    func `is multipass: a checkpoint replays the sequence`() {
-        var cursor = ArrayCursor([1, 2, 3])
+    func `A checkpoint replays the sequence`() {
+        var cursor = Self.ArrayCursor([1, 2, 3])
         _ = cursor.next()
 
         let mark = cursor.checkpoint
@@ -29,8 +33,8 @@ struct `Cursor Tests` {
     }
 
     @Test
-    func `satisfies the Restorable laws`() {
-        var cursor = ArrayCursor([1, 2, 3])
+    func `A cursor satisfies the restoration laws`() {
+        var cursor = Self.ArrayCursor([1, 2, 3])
         _ = cursor.next()
 
         #expect(
@@ -46,31 +50,33 @@ struct `Cursor Tests` {
     }
 }
 
-private struct ArrayCursor: Cursor.`Protocol` {
+extension Cursor.`Cursors restore iteration state` {
+    private struct ArrayCursor: Cursor.`Protocol` {
 
-    let elements: [Int]
+        let elements: [Int]
 
-    private(set) var position: Int
+        private(set) var position: Int
 
-    init(_ elements: [Int]) {
-        self.elements = elements
-        self.position = 0
-    }
+        init(_ elements: [Int]) {
+            self.elements = elements
+            self.position = 0
+        }
 
-    typealias Element = Int
-    typealias Failure = Never
+        typealias Element = Int
+        typealias Failure = Never
 
-    mutating func next() -> Int? {
-        guard position < elements.count else { return nil }
-        defer { position += 1 }
-        return elements[position]
-    }
+        mutating func next() -> Int? {
+            guard position < elements.count else { return nil }
+            defer { position += 1 }
+            return elements[position]
+        }
 
-    var checkpoint: Int {
-        position
-    }
+        var checkpoint: Int {
+            position
+        }
 
-    mutating func seek(to checkpoint: Int) {
-        position = checkpoint
+        mutating func seek(to checkpoint: Int) {
+            position = checkpoint
+        }
     }
 }
