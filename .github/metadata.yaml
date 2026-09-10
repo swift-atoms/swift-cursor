@@ -1,4 +1,3 @@
-# .github/metadata.yaml
 description: "The algebraic cursor: a positioned, multipass read head over a sequence."
 topics:
   - primitives
