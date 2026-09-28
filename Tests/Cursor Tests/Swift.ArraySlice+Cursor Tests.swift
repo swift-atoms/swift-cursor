@@ -93,7 +93,9 @@ extension Cursor.`Standard library cursors restore snapshots` {
         copy[1] = 9
         #expect(Array(cursor) == [1, 8, 3])
         #expect(Array(copy) == [9, 2, 3])
-        #expect(Array(mark) == [1, 2, 3])
+        var replay = [Int]()[...]
+        replay.seek(to: mark)
+        #expect(Array(replay) == [1, 2, 3])
 
         cursor = [7][...]
         cursor.seek(to: mark)
@@ -104,13 +106,12 @@ extension Cursor.`Standard library cursors restore snapshots` {
     }
 
     @Test
-    func `Equal slice checkpoint contents can have different bounds`() {
+    func `Slice checkpoints distinguish positions even when contents repeat`() {
         let repeated = [1, 2, 1, 2]
         let first = repeated[0..<2].checkpoint
         let second = repeated[2..<4].checkpoint
 
-        #expect(first.startIndex != second.startIndex)
-        #expect(first == second)
+        #expect(first != second)
         #expect(first == [1, 2][...].checkpoint)
     }
 
@@ -136,6 +137,7 @@ extension Cursor.`Standard library cursors restore snapshots` {
         let first = cursor.checkpoint
         #expect(cursor.next() == expected[0])
         let second = cursor.checkpoint
+        let secondIndex = cursor.startIndex
         for character in expected.dropFirst() {
             #expect(cursor.next() == character)
         }
@@ -144,7 +146,7 @@ extension Cursor.`Standard library cursors restore snapshots` {
         #expect(cursor.next() == nil)
 
         cursor.seek(to: second)
-        #expect(cursor.startIndex == second.startIndex)
+        #expect(cursor.startIndex == secondIndex)
         #expect(cursor.next() == expected[1])
         cursor.seek(to: first)
         #expect(Array(cursor) == expected)
@@ -153,7 +155,7 @@ extension Cursor.`Standard library cursors restore snapshots` {
     }
 
     @Test
-    func `Substring checkpoint equality preserves canonical character equivalence`() {
+    func `Substring checkpoints at matching initial positions compare equal`() {
         let composed: Substring = "é"
         let decomposed: Substring = "e\u{301}"
 

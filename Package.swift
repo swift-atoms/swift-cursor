@@ -17,6 +17,9 @@ let package = Package(
         .library(name: "Cursor Foundation Integration", targets: ["Cursor Foundation Integration"]),
         .library(name: "Cursor Test Support", targets: ["Cursor Test Support"]),
     ],
+    traits: [
+        .trait(name: "Collection", description: "Approved Collection integration", enabledTraits: []),
+    ],
     dependencies: [
         .package(
             url: "https://github.com/swift-atoms/swift-iterator.git",
@@ -62,6 +65,7 @@ let package = Package(
             path: "Tests/Cursor Tests",
             resources: [.copy("Fixtures")]
         ),
+        .testTarget(name: "Approved Collection Cursor Tests", dependencies: ["Cursor"], path: "Tests/Approved Collection Cursor"),
     ],
     swiftLanguageModes: [.v6]
 )
