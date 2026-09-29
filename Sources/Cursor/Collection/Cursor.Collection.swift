@@ -1,6 +1,6 @@
 #if Collection
-public import Checkpoint
-public import Iterator
+import Checkpoint
+import Iterator
 
 extension Cursor {
     public enum CollectionError: Swift.Error, Equatable {
