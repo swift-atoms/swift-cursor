@@ -10,8 +10,6 @@ extension Cursor {
         case invalidOffset(Int)
     }
 
-    /// An explicit cursor over a standard-library collection. Checkpoints are
-    /// collection indices; restore validates index membership before changing state.
     public struct Collection<Base: Swift.Collection>: Cursor.`Protocol` {
         public typealias Element = Base.Element
         public typealias Failure = Never
@@ -41,8 +39,6 @@ extension Cursor {
             }
             return candidate == base.endIndex
         }
-        /// Restorable requires a nonthrowing operation. Invalid checkpoints trap;
-        /// use restore(to:) to validate an externally supplied checkpoint with errors.
         public mutating func seek(to checkpoint: Checkpoint) {
             precondition(isValid(checkpoint), "Checkpoint is not an index in this collection")
             position = checkpoint
