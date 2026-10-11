@@ -1,7 +1,7 @@
 public import Checkpoint
 public import Iterator
 
-extension Swift.ArraySlice: @retroactive Iterator.`Protocol`, Cursor.`Protocol`
+extension Swift::ArraySlice: @retroactive Iterator.`Protocol`, Cursor.`Protocol`
 where Element: Equatable {
 
     public typealias Failure = Never

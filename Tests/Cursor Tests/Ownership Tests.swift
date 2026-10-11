@@ -7,25 +7,6 @@ extension Cursor {
     struct `Cursors preserve output ownership` {
         final class Counts: Sendable {
             let state = Mutex((created: 0, destroyed: 0, cursors: 0))
-
-            func create() -> Int {
-                state.withLock {
-                    $0.created += 1
-                    return $0.created
-                }
-            }
-
-            func destroy() {
-                state.withLock { $0.destroyed += 1 }
-            }
-
-            func cursorDestroyed() {
-                state.withLock { $0.cursors += 1 }
-            }
-
-            var created: Int { state.withLock { $0.created } }
-            var destroyed: Int { state.withLock { $0.destroyed } }
-            var cursors: Int { state.withLock { $0.cursors } }
         }
 
         struct Token: ~Copyable {
@@ -42,7 +23,7 @@ extension Cursor {
             deinit { counts.destroy() }
         }
 
-        enum ReadError: Swift.Error, Equatable {
+        enum ReadError: Swift::Error, Equatable {
             case rejected(Int)
         }
 
@@ -73,29 +54,12 @@ extension Cursor {
         }
 
         struct Borrowed: Cursor.`Protocol`, ~Copyable, ~Escapable {
-            typealias Element = Span<Int>
-            typealias Failure = Never
-
             let values: Span<Int>
             var position = 0
 
             @_lifetime(copy values)
             init(_ values: Span<Int>) {
                 self.values = values
-            }
-
-            var checkpoint: Int { position }
-
-            mutating func seek(to checkpoint: Int) {
-                position = checkpoint
-            }
-
-            @_lifetime(&self)
-            mutating func next() -> Span<Int>? {
-                guard position < values.count else { return nil }
-                let result = values.extracting(position..<(position + 1))
-                position += 1
-                return result
             }
         }
 
@@ -260,4 +224,44 @@ extension Cursor.`Cursors preserve output ownership` {
         let exhausted = advance(&cursor) == nil
         #expect(exhausted)
     }
+}
+
+extension Cursor.`Cursors preserve output ownership`.Borrowed {
+    typealias Element = Span<Int>
+    typealias Failure = Never
+
+    var checkpoint: Int { position }
+
+    mutating func seek(to checkpoint: Int) {
+        position = checkpoint
+    }
+
+    @_lifetime(&self)
+    mutating func next() -> Span<Int>? {
+        guard position < values.count else { return nil }
+        let result = values.extracting(position..<(position + 1))
+        position += 1
+        return result
+    }
+}
+
+extension Cursor.`Cursors preserve output ownership`.Counts {
+    func create() -> Int {
+        state.withLock {
+            $0.created += 1
+            return $0.created
+        }
+    }
+
+    func destroy() {
+        state.withLock { $0.destroyed += 1 }
+    }
+
+    func cursorDestroyed() {
+        state.withLock { $0.cursors += 1 }
+    }
+
+    var created: Int { state.withLock { $0.created } }
+    var destroyed: Int { state.withLock { $0.destroyed } }
+    var cursors: Int { state.withLock { $0.cursors } }
 }

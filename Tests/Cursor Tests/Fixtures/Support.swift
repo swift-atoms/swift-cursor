@@ -5,10 +5,13 @@ struct OwnedValue: ~Copyable {
 }
 
 struct ProducingCursor: Cursor.`Protocol`, ~Copyable {
+    var position = 0
+}
+
+extension ProducingCursor {
     typealias Element = OwnedValue
     typealias Failure = Never
 
-    var position = 0
     var checkpoint: Int { position }
 
     mutating func seek(to checkpoint: Int) {
@@ -23,9 +26,6 @@ struct ProducingCursor: Cursor.`Protocol`, ~Copyable {
 }
 
 struct BorrowedCursor: Cursor.`Protocol`, ~Copyable, ~Escapable {
-    typealias Element = Span<Int>
-    typealias Failure = Never
-
     let values: Span<Int>
     var position = 0
 
@@ -33,6 +33,11 @@ struct BorrowedCursor: Cursor.`Protocol`, ~Copyable, ~Escapable {
     init(_ values: Span<Int>) {
         self.values = values
     }
+}
+
+extension BorrowedCursor {
+    typealias Element = Span<Int>
+    typealias Failure = Never
 
     var checkpoint: Int { position }
 

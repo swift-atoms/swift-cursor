@@ -60,17 +60,16 @@ let package = Package(
                 .target(name: "Cursor"),
                 .product(name: "Checkpoint Test Support", package: "swift-checkpoint"),
                 .target(name: "Cursor Test Support"),
-                .target(name: "Cursor Foundation Integration"),
             ],
             path: "Tests/Cursor Tests",
             resources: [.copy("Fixtures")]
         ),
-        .testTarget(name: "Approved Collection Cursor Tests", dependencies: ["Cursor"], path: "Tests/Approved Collection Cursor"),
+        .testTarget(name: "Approved Collection Cursor Tests", dependencies: [.target(name: "Cursor")], path: "Tests/Approved Collection Cursor"),
     ],
     swiftLanguageModes: [.v6]
 )
 
-for target in package.targets where ![.system, .binary, .plugin].contains(target.type) {
+for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
     target.swiftSettings = (target.swiftSettings ?? []) + [
         .strictMemorySafety(),
         .enableUpcomingFeature("ExistentialAny"),
