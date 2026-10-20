@@ -18,7 +18,11 @@ let package = Package(
         .library(name: "Cursor Test Support", targets: ["Cursor Test Support"]),
     ],
     traits: [
-        .trait(name: "Collection", description: "Approved Collection integration", enabledTraits: []),
+        .trait(
+            name: "Collection",
+            description: "Approved Collection integration",
+            enabledTraits: []
+        )
     ],
     dependencies: [
         .package(
@@ -39,18 +43,18 @@ let package = Package(
             ],
             path: "Sources/Cursor"
         ),
-        
+
         .target(
             name: "Cursor Foundation Integration",
             dependencies: [
-                .target(name: "Cursor"),
+                .target(name: "Cursor")
             ],
             path: "Sources/Cursor Foundation Integration"
         ),
         .target(
             name: "Cursor Test Support",
             dependencies: [
-                .target(name: "Cursor"),
+                .target(name: "Cursor")
             ],
             path: "Tests/Support"
         ),
@@ -64,20 +68,25 @@ let package = Package(
             path: "Tests/Cursor Tests",
             resources: [.copy("Fixtures")]
         ),
-        .testTarget(name: "Approved Collection Cursor Tests", dependencies: [.target(name: "Cursor")], path: "Tests/Approved Collection Cursor"),
+        .testTarget(
+            name: "Approved Collection Cursor Tests",
+            dependencies: [.target(name: "Cursor")],
+            path: "Tests/Approved Collection Cursor"
+        ),
     ],
     swiftLanguageModes: [.v6]
 )
 
 for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    target.swiftSettings = (target.swiftSettings ?? []) + [
-        .strictMemorySafety(),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableUpcomingFeature("MemberImportVisibility"),
-        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableUpcomingFeature("InferIsolatedConformances"),
-        .enableExperimentalFeature("Lifetimes"),
-        .treatAllWarnings(as: .error),
-    ]
+    target.swiftSettings =
+        (target.swiftSettings ?? []) + [
+            .strictMemorySafety(),
+            .enableUpcomingFeature("ExistentialAny"),
+            .enableUpcomingFeature("InternalImportsByDefault"),
+            .enableUpcomingFeature("MemberImportVisibility"),
+            .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+            .enableUpcomingFeature("InferIsolatedConformances"),
+            .enableExperimentalFeature("Lifetimes"),
+            .treatAllWarnings(as: .error),
+        ]
 }

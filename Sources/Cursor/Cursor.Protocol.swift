@@ -3,6 +3,7 @@ public import Iterator
 
 extension Cursor {
 
-    public protocol `Protocol`<Element, Failure>: Iterator.`Protocol`, Restorable, ~Copyable, ~Escapable
+    public protocol `Protocol`<Element, Failure>: Iterator.`Protocol`, Restorable, ~Copyable,
+        ~Escapable
     where Checkpoint: Equatable, Element: ~Copyable & ~Escapable {}
 }
