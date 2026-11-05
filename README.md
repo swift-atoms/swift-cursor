@@ -1,6 +1,6 @@
 # swift-cursor
 
-Use this package when you iterate input and need to back up: a parser or scanner that tries one reading, rewinds to a saved position and tries another. Start from `Cursor.Protocol`, which is an `Iterator.Protocol` that is also `Restorable` with an `Equatable` checkpoint. `Swift.ArraySlice` and `Swift.Substring` already conform, and `Cursor.Collection<Base>` wraps any other collection. If you only iterate forward, use `Iterator.Protocol` from swift-iterator. If you need save and restore without iteration, use `Restorable` from swift-checkpoint.
+Use this package when you iterate input and need to back up: a parser or scanner that tries one reading, rewinds to a saved position and tries another. Start from `Cursor.Protocol`, which is an `Iterator.Protocol` that is also `Restorable` with an `Equatable` checkpoint. `Swift.Substring` and, when its elements are `Equatable`, `Swift.ArraySlice` already conform, and `Cursor.Collection<Base>` wraps any other collection. If you only iterate forward, use `Iterator.Protocol` from swift-iterator. If you need save and restore without iteration, use `Restorable` from swift-checkpoint.
 
 ## Laws
 
