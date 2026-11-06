@@ -2,12 +2,14 @@ import Checkpoint_Test_Support
 import Cursor
 import Testing
 
-extension Cursor {
+enum `Cursor Tests` {}
+
+extension `Cursor Tests` {
     @Suite
     struct `Cursors restore iteration state` {}
 }
 
-extension Cursor.`Cursors restore iteration state` {
+extension `Cursor Tests`.`Cursors restore iteration state` {
 
     @Test
     func `A cursor iterates its elements in order`() {
@@ -50,7 +52,7 @@ extension Cursor.`Cursors restore iteration state` {
     }
 }
 
-extension Cursor.`Cursors restore iteration state` {
+extension `Cursor Tests`.`Cursors restore iteration state` {
     private struct ArrayCursor: Cursor.`Protocol` {
 
         let elements: [Int]

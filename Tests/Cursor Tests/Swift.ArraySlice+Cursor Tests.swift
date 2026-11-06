@@ -2,12 +2,12 @@ import Checkpoint_Test_Support
 import Cursor
 import Testing
 
-extension Cursor {
+extension `Cursor Tests` {
     @Suite
     struct `Standard library cursors restore snapshots` {}
 }
 
-extension Cursor.`Standard library cursors restore snapshots` {
+extension `Cursor Tests`.`Standard library cursors restore snapshots` {
 
     @Test
     func `A slice iterates its elements in order`() {
@@ -59,7 +59,7 @@ extension Cursor.`Standard library cursors restore snapshots` {
     }
 }
 
-extension Cursor.`Standard library cursors restore snapshots` {
+extension `Cursor Tests`.`Standard library cursors restore snapshots` {
     @Test
     func `Nested slice checkpoints restore nonzero bounds after exhaustion`() {
         var cursor = [0, 1, 2, 3, 4][1..<4]

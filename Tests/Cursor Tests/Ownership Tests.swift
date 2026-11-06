@@ -2,7 +2,7 @@ import Cursor
 import Synchronization
 import Testing
 
-extension Cursor {
+extension `Cursor Tests` {
     @Suite
     struct `Cursors preserve output ownership` {
         final class Counts: Sendable {
@@ -87,7 +87,7 @@ extension Cursor {
     }
 }
 
-extension Cursor.`Cursors preserve output ownership` {
+extension `Cursor Tests`.`Cursors preserve output ownership` {
     @Test
     func `Seeking can produce a fresh owned value while the previous value remains alive`() throws {
         let counts = Self.Counts()
@@ -226,7 +226,7 @@ extension Cursor.`Cursors preserve output ownership` {
     }
 }
 
-extension Cursor.`Cursors preserve output ownership`.Borrowed {
+extension `Cursor Tests`.`Cursors preserve output ownership`.Borrowed {
     typealias Element = Span<Int>
     typealias Failure = Never
 
@@ -245,7 +245,7 @@ extension Cursor.`Cursors preserve output ownership`.Borrowed {
     }
 }
 
-extension Cursor.`Cursors preserve output ownership`.Counts {
+extension `Cursor Tests`.`Cursors preserve output ownership`.Counts {
     func create() -> Int {
         state.withLock {
             $0.created += 1
